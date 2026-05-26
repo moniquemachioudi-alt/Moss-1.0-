@@ -1,29 +1,25 @@
 import logo from './loading_plant.svg';
 import './App.css';
 
+// // src/App.js
+// import React, { useState } from 'react';
+// import './App.css'; // Global styles loaded here
+
+// // Import your page folders
+// import LoginPage from './pages/LoginPage/LoginPage';
+// import GardenPage from './pages/GardenPage/GardenPage';
+
 // function App() {
+//   const [currentPage, setCurrentPage] = useState('login');
+
 //   return (
-//     <div className="App">
-//       <header className="Loading">
-        
-//         <img src={logo} className="App-logo" alt="logo" />
-
-//         <p>
-          
-//           Loading...
-          
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
+//     <div className="app-container">
+//       {/* App.js controls the layout skeleton, Pages handle the inside content */}
+//       <main className="app-main-content">
+//         {currentPage === 'login' && <LoginPage onLogin={() => setCurrentPage('garden')} />}
+//         {currentPage === 'garden' && <GardenPage />}
+//       </main>
 //     </div>
-
 //   );
 // }
 
