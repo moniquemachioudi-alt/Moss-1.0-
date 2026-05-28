@@ -1,48 +1,42 @@
-import logo from './loading_plant.svg';
+// state refers to data that changes over time based on user interactions 
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
+// import {HashRouter as Router, Routes, Route} from "react-router-dom"
 
-// // src/App.js
-// import React, { useState } from 'react';
-// import './App.css'; // Global styles loaded here
 
-// // Import your page folders
-// import LoginPage from './pages/LoginPage/LoginPage';
-// import GardenPage from './pages/GardenPage/GardenPage';
+// import LoadingPage.js and assign it the name "LoadingPage"
+import LoadingPage from './pages/LoadingPage/LoadingPage.js'
+import LoginPage from './pages/LoginPage/LoginPage.js'
+// import MyGarden  from './pages/LoadingPage/MyGarden.js'
+// import PlantInfoPage from './pages/LoadingPage/PlantInfoPage.js'
+// import AiAnalysisGraph  from './pages/LoadingPage/AiAnalysisGraph.js'
 
-// function App() {
-//   const [currentPage, setCurrentPage] = useState('login');
-
-//   return (
-//     <div className="app-container">
-//       {/* App.js controls the layout skeleton, Pages handle the inside content */}
-//       <main className="app-main-content">
-//         {currentPage === 'login' && <LoginPage onLogin={() => setCurrentPage('garden')} />}
-//         {currentPage === 'garden' && <GardenPage />}
-//       </main>
-//     </div>
-//   );
-// }
-
-// export default App;
 
 
 function App() {
   return (
-    <div className="App">
 
-      <div className="App-header">
-        <h1> Welcome to Moss </h1>
-          <div className="center-container">
+    <BrowserRouter>
 
-            <img src={logo} className="App-logo" alt="logo" />
-
-          </div>
-      </div>
+    {/* this will make like header links, uncomment to see what i mean  */}
+      <nav>
+        {/* <Link to ="/">LoadingPage</Link> | {" "}
+        <Link to ="/">LoginPage</Link> | {" "} */}
+      </nav>
 
 
+      <Routes>
+        <Route path="/" element={<LoadingPage />} />
+        {/* <Route path="/about" element={<LoginPage />} /> */}
 
-    </div>
+      </Routes>
+
+    </BrowserRouter>
+
+
 
   );
 }
-export default App;
+
+
+export default App
