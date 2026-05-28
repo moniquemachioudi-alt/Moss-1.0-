@@ -1,26 +1,53 @@
 /* App.css to handle things that every single sub-page needs to share: */
 
+@import url('pages/LoadingPage/LoadingPage.css');
+@import url('pages/LoginPage/LoginPage.css');
+@import url('pages/MyGarden/MyGarden.css');
+@import url('pages/PlantInfoPage/PlantInfoPage.css');
+@import url('pages/AiAnalysisGraph/AiAnalysisGraph.css');
 
-.App {
-  text-align: center;
+
+/* ex. all the components of the entire app will have these common values */
+body {
+  margin: 0;
+  background-color: #1e222b; /* Sleek dark theme */
+  color: #ffffff;
+  font-family: sans-serif;
 }
 
-.App-logo {
+.app-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+
+
+/* Version1, i.e. when it was the loading page  */
+/* main wrapper for the entire application 
+.App {
+  text-align: center;
+} */
+
+
+
+/* .App-logo {
   height: 10vmin;
   pointer-events: none;
   max-width: 100%;
-}
+} */
 
 /* @media is the foundation of responsive web design, 
 allowing your application to change layouts, */
-@media (prefers-reduced-motion: no-preference) {
+/* @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 7s linear;
 
   }
-}
+} */
 
-.center-container {
+/* .center-container {
   display: flex; 
   justify-content: center; 
   align-items: center;
@@ -28,12 +55,11 @@ allowing your application to change layouts, */
   width: 100vw;
   margin: 0;
   box-sizing: border-box;
-}
+} */
 
-
+/* 
 .App-header {
-  /* background-color: #889063; */
-  background-image: url("loading_background.jpg");
+  background-image: url("./images/loading_background.jpg");
   background-size: cover;
   min-height: 100vh;
   display: flex;
@@ -43,17 +69,18 @@ allowing your application to change layouts, */
   font-size: calc(10px + 2vmin);
   font-family:cursive;
   color: black;
-}
+}  */
 
 /* .App-link {
   color: #61dafb;
 } */
 
-@keyframes App-logo-spin {
+/* @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
   }
-}
+} */
+
