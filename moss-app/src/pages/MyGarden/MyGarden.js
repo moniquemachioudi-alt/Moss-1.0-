@@ -11,8 +11,6 @@ import Temp from './TempPage/Temp';
 
 
 
-
-
 export default function MyGarden(){
 
     return(
