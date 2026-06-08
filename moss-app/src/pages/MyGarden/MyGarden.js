@@ -28,10 +28,10 @@ export default function MyGarden(){
 
 
         <div className="boxes-container"> 
-          <Link to="/garden/sunlight" className="link-box"> Sun Light </Link>
-          <Link to="/garden/soilMoisture" className="link-box"> Soil Moisture </Link>
-          <Link to="/garden/humidity" className="link-box"> Humidity </Link>  {/* this is the atmospheric Humidity */}
-          <Link to="/garden/temperature" className="link-box"> Temperature  </Link> 
+          <Link to="/garden/sunlight" className="link-box-sunlight"> Sun Light </Link>
+          <Link to="/garden/soilMoisture" className="link-box-soilMoisture"> Soil Moisture </Link>
+          <Link to="/garden/humidity" className="link-box-humidity"> Humidity </Link>  {/* this is the atmospheric Humidity */}
+          <Link to="/garden/temperature" className="link-box-temp"> Temperature  </Link> 
         </div>
 
 

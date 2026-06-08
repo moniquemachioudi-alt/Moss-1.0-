@@ -44,34 +44,177 @@
     gap: 20px;
     width: 100%;
     margin-bottom: 50px; 
+
     
 
 }
 
 /* customizing the four boxes (+ making it clickable) */
-.link-box {
-    display: flex;
-    justify-content: center; /* This centers the boxes horizontally */
-    align-items: center;
-    background-color: rgba(255, 255, 255, 0.9);
-    color: black;
-    font-family: 'Courier New', Courier, monospace;
-    border: 2px solid;
-    border-radius: 50px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+.link-box-sunlight {
 
-    /* Text alignment and removing the default link underline */
-    text-align: center;
+    /* Text location customization */
+    display: flex;
+    align-items: center;
+
+    flex-direction: column;
+    justify-content: flex-end ;
+    padding-bottom: 15px;
+
+
+    /* Text display customization */
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    z-index: 3;
     text-decoration: none;
-    color: #333333;
     font-weight: 300;
+
     
+    /* Box customization */
+    border-radius: 50px;        /* how rounded the boxes are */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);  /* fall back color, in case images don't wor; */
+    background-color: rgba(255, 255, 255, 0.9);
+    background-image: url("../../images/sunLight.png");
+    background-size: cover;
+    background-repeat: no-repeat; /* Prevents the image from tiling */
+    background-position: center;  /* Centers the image in the box */
+
+    height: 200px;
+    width: 250px;
+
     /* Smooth transition for hover effects */
     transition: all 0.2s ease-in-out;
 
-    width: 250px;
-    height: 200px;
 }
+
+.link-box-humidity {
+
+    /* Text location customization */
+    display: flex;
+    align-items: center;
+
+    flex-direction: column;
+    justify-content: flex-end ;
+    padding-bottom: 15px;
+
+
+    /* Text display customization */
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    z-index: 3;
+    text-decoration: none;
+    font-weight: 300;
+
+    
+    /* Box customization */
+    border-radius: 50px;        /* how rounded the boxes are */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);  /* fall back color, in case images don't wor; */
+    background-color: rgba(255, 255, 255, 0.9);
+    background-image: url("../../images/humidity.png");
+    background-size: cover;
+    background-repeat: no-repeat; /* Prevents the image from tiling */
+    background-position: center;  /* Centers the image in the box */
+
+    height: 200px;
+    width: 250px;
+
+    /* Smooth transition for hover effects */
+    transition: all 0.2s ease-in-out;
+
+}
+
+
+
+.link-box-soilMoisture {
+
+    /* Text location customization */
+    display: flex;
+    align-items: center;
+
+    flex-direction: column;
+    justify-content: flex-end ;
+    padding-bottom: 15px;
+
+
+    /* Text display customization */
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    z-index: 3;
+    text-decoration: none;
+    font-weight: 300;
+
+    
+    /* Box customization */
+    border-radius: 50px;        /* how rounded the boxes are */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);  /* fall back color, in case images don't wor; */
+    background-color: rgba(255, 255, 255, 0.9);
+    background-image: url("../../images/soilMoisture.png");
+    background-size: cover;
+    background-repeat: no-repeat; /* Prevents the image from tiling */
+    background-position: center;  /* Centers the image in the box */
+
+    height: 200px;
+    width: 250px;
+
+    /* Smooth transition for hover effects */
+    transition: all 0.2s ease-in-out;
+
+
+}
+
+
+
+
+
+
+.link-box-temp {
+
+    /* Text location customization */
+    display: flex;
+    align-items: center;
+
+    flex-direction: column;
+    justify-content: flex-end ;
+    padding-bottom: 15px;
+
+
+    /* Text display customization */
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    z-index: 3;
+    text-decoration: none;
+    font-weight: 300;
+
+    
+    /* Box customization */
+    border-radius: 50px;        /* how rounded the boxes are */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);  /* fall back color, in case images don't wor; */
+    background-color: rgba(255, 255, 255, 0.9);
+    background-image: url("../../images/temp.png");
+    background-size: cover;
+    background-repeat: no-repeat; /* Prevents the image from tiling */
+    background-position: center;  /* Centers the image in the box */
+
+    height: 200px;
+    width: 250px;
+
+    /* Smooth transition for hover effects */
+    transition: all 0.2s ease-in-out;
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
