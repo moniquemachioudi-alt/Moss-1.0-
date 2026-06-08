@@ -1,0 +1,48 @@
+/* .login-style{
+
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        
+} */
+
+.bg-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* Darkens the video by 40% */
+  z-index: 2;
+}
+
+.login-background {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-color: #000; /* Fallback color while video loads */
+}
+
+.login-card {
+  position: relative; /* This activates the z-index below */
+  z-index: 3; /* Forces everything inside to sit on top of the video */
+  text-align: center;
+  font:oblique;
+  color: white; /* Makes your h1 text visible against the dark overlay */
+}
