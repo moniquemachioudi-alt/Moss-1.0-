@@ -1,0 +1,99 @@
+
+/* think of this as the root, of how the entire myGarden will look like */
+.MyGarden_pageContainer {
+
+    display: flex;
+    flex-direction: column;   /* Stacks children: Header -> Circles -> Chatbox */
+    align-items: center;      /* Centers all three main sections horizontally */
+    width: 100%;
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 20px;
+
+    background-image: url("../../images/myGarden_backgroung.jpg");
+    background-size: cover;
+    background-repeat: no-repeat; /* Prevents the image from tiling */
+    background-position: center;  /* Centers the image in the box */
+
+}
+
+
+
+/* Customizing the Title */
+.myGarden_header {
+    position: relative; 
+    z-index: 3;             /* Keeps text above video background */
+    text-align: center;
+    font-style: italic;     /* Restored from your 'font:oblique' */
+    font-size: 2rem;      /* Scaled down slightly so standard text looks clean next to h1 */
+    font-family:cursive; 
+    color: White;
+   
+
+}
+
+
+/* this is making the four boxes next to each other */
+.boxes-container {
+    display: flex; 
+    flex-wrap: wrap;        /* Allows circles to wrap cleanly to the next line on mobile */
+    position: relative;
+    z-index: 3;
+    justify-content: center; 
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 50px; 
+    
+
+}
+
+/* customizing the four boxes (+ making it clickable) */
+.link-box {
+    display: flex;
+    justify-content: center; /* This centers the boxes horizontally */
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: black;
+    font-family: 'Courier New', Courier, monospace;
+    border: 2px solid;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+    /* Text alignment and removing the default link underline */
+    text-align: center;
+    text-decoration: none;
+    color: #333333;
+    font-weight: 300;
+    
+    /* Smooth transition for hover effects */
+    transition: all 0.2s ease-in-out;
+
+    width: 250px;
+    height: 200px;
+}
+
+
+
+/* this is for the chatbox */
+.chatbox-container {
+    position: relative;
+    z-index: 3;             /* Forces it to sit on top of the video */
+    box-sizing: border-box;
+    
+    /* Flexibility & Size rules */
+    width: 90%;             /* Shrinks smoothly on smaller mobile screens */
+    max-width: 700px;       /* Matches the structural boundary of the four circles on desktop */
+    min-height: 250px;      /* Set a base height for the chat history space */
+    
+    /* Styling aesthetics */
+    background-color: rgba(255, 255, 255, 0.9); /* Opaque white allows background video hints */
+    border: 2px solid black;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    
+    /* Internal text layout */
+    text-align: center;  
+
+}
