@@ -1,7 +1,7 @@
 import React from 'react';
 import { SignIn } from "@clerk/clerk-react";
 import './LoginPage.css';
-// import bgVideo from '../../videos/LoginPage_slow.mp4';
+import bgVideo from '../../videos/LoginPage_slow.mp4';
 
 export default function LoginPage() {
     return(
@@ -9,9 +9,9 @@ export default function LoginPage() {
             {/* The is the location of the Background Video */}
 
             {/* comment this out, since video file is too big */}
-            {/* <video autoPlay loop muted playsInline className="bg-video">
+            { <video autoPlay loop muted playsInline className="bg-video">
                 <source src={bgVideo} type='video/mp4'/>
-            </video> */}
+            </video> }
 
             {/* Dark Overlay for Readability */}
             <div className="video-overlay" />
