@@ -1,4 +1,4 @@
-.login-style{
+.signup-style{
 
 
         display: flex;
@@ -28,7 +28,7 @@
   z-index: 2;
 }
 
-.login-background {
+.signup-background {
   position: relative;
   width: 100vw;
   height: 100vh;
@@ -39,7 +39,7 @@
   background-color: #000; /* Fallback color while video loads */
 }
 
-.login-card {
+.signup-card {
   position: relative; /* This activates the z-index below */
   z-index: 3; /* Forces everything inside to sit on top of the video */
   text-align: center;

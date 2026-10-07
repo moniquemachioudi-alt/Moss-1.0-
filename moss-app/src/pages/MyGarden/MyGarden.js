@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Navbar from '../../components/Navbar';
 
 import './MyGarden.css';
 
@@ -19,6 +20,7 @@ export default function MyGarden(){
 
 
         <div className="myGarden_header"> 
+          <Navbar/>
           <h1> My Garden </h1>
           <p>This main page contains the almagam of all your plants! </p>
         </div>
