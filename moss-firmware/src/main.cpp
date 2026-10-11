@@ -10,19 +10,14 @@
 2. Run the program
 3. Look at the sensor_data.csv files 
 
-
-
-
-
 */
-
-
 
 
 #include <Arduino.h>
 
 // connected on GPIO34 
 const int MOISTURE_PIN = 34;
+const int bluePin = 2;  
 
 
 // established endpoints 
@@ -34,21 +29,35 @@ void setup() {
   Serial.begin(115200);
   delay(1000);
 
-  analogReadResolution(12);
-  analogSetPinAttenuation(MOISTURE_PIN, ADC_11db);
+  analogReadResolution(12);   // make it 12 bit range aka, 0-4095
+  analogSetPinAttenuation(MOISTURE_PIN, ADC_11db); // scale down the incoming voltage so it can safely read higher analog signals.
 
-  Serial.println("timestamp_ms,raw_adc,voltage_v,moisture_pct");
+  pinMode(bluePin, OUTPUT);   // pushing electricity OUT to power things
+  digitalWrite(bluePin, LOW); // start with low
+
+  // my CVS
+  Serial.println("elapsed_time_s,raw_adc,voltage_v,moisture_pct");
 }
 
 
 
 
 void loop() {
+
+  // configure the LED pin, s.t. it blinks blue whenever data is collecting
+  digitalWrite(bluePin, HIGH);
+
+
+  // Calculates a smoothed average of 10 soil moisture sensor readings to 
+  // runs a loop 10 times, sums it up, then average it
+  // then reruns the loop (void loop())
+  // more accurate and stable measurement => filters out random electrical noise
   long sum = 0;
   for (int i = 0; i < 10; i++) {
     sum += analogRead(MOISTURE_PIN);
     delay(10);
   }
+
   int rawADC = sum / 10;
 
   float voltage = (rawADC / 4095.0) * 3.3;
@@ -63,6 +72,10 @@ void loop() {
   Serial.print(voltage, 2);
   Serial.print(",");
   Serial.println(moisturePercent);
+
+
+  // turn off the LED after one cycle
+  digitalWrite(bluePin, LOW);
 
   delay(1000);
 
