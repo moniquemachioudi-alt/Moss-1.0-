@@ -1,0 +1,281 @@
+
+/* think of this as the root, of how the entire myGarden will look like */
+.MyGarden_pageContainer {
+
+    display: flex;
+    flex-direction: column;   /* Stacks children: Header -> Circles -> Chatbox */
+    align-items: center;      /* Centers all three main sections horizontally */
+    width: 100%;
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 20px;
+
+    background-image: url("../../images/myGarden_backgroung.jpg");
+    background-color: grey;
+    background-size: cover;
+    background-repeat: no-repeat; /* Prevents the image from tiling */
+    background-position: center;  /* Centers the image in the box */
+
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    
+    /* background-color: #f5f5f5; */
+}
+
+.navbar button {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    padding: 0;
+    margin:0;
+    cursor: pointer;
+    color:rgb(157, 235, 171);
+    line-height: 1;
+    align-items: right;
+}
+
+.navbar > div {
+    position: absolute;
+    top: 50px;
+    left: 1rem;
+    background-color: white;
+    /* border: 1px solid #ddd; */
+    padding: 0.5rem;
+    width: 120px;
+    font-size: 0.9rem;
+}
+
+.navbar a {
+    display: block;
+    padding: 0.25rem 0;
+    text-decoration: none;
+    color: #333;
+}
+
+
+/* Customizing the Title */
+.myGarden_header {
+    position: relative; 
+    z-index: 3;             /* Keeps text above video background */
+    text-align: center;
+    font-style: italic;     /* Restored from your 'font:oblique' */
+    font-size: 2rem;      /* Scaled down slightly so standard text looks clean next to h1 */
+    font-family:cursive; 
+    color: White;
+   
+
+}
+
+
+/* this is making the four boxes next to each other */
+.boxes-container {
+    display: flex; 
+    flex-wrap: wrap;        /* Allows circles to wrap cleanly to the next line on mobile */
+    position: relative;
+    z-index: 3;
+    justify-content: center; 
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 50px; 
+
+    
+
+}
+
+/* customizing the four boxes (+ making it clickable) */
+.link-box-sunlight {
+
+    /* Text location customization */
+    display: flex;
+    align-items: center;
+
+    flex-direction: column;
+    justify-content: flex-end ;
+    padding-bottom: 15px;
+
+
+    /* Text display customization */
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    z-index: 3;
+    text-decoration: none;
+    font-weight: 300;
+
+    
+    /* Box customization */
+    border-radius: 50px;        /* how rounded the boxes are */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);  /* fall back color, in case images don't wor; */
+    background-color: rgba(255, 255, 255, 0.9);
+    background-image: url("../../images/sunLight.png");
+    background-size: cover;
+    background-repeat: no-repeat; /* Prevents the image from tiling */
+    background-position: center;  /* Centers the image in the box */
+
+    height: 200px;
+    width: 250px;
+
+    /* Smooth transition for hover effects */
+    transition: all 0.2s ease-in-out;
+
+}
+
+.link-box-humidity {
+
+    /* Text location customization */
+    display: flex;
+    align-items: center;
+
+    flex-direction: column;
+    justify-content: flex-end ;
+    padding-bottom: 15px;
+
+
+    /* Text display customization */
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    z-index: 3;
+    text-decoration: none;
+    font-weight: 300;
+
+    
+    /* Box customization */
+    border-radius: 50px;        /* how rounded the boxes are */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);  /* fall back color, in case images don't wor; */
+    background-color: rgba(255, 255, 255, 0.9);
+    background-image: url("../../images/humidity.png");
+    background-size: cover;
+    background-repeat: no-repeat; /* Prevents the image from tiling */
+    background-position: center;  /* Centers the image in the box */
+
+    height: 200px;
+    width: 250px;
+
+    /* Smooth transition for hover effects */
+    transition: all 0.2s ease-in-out;
+
+}
+
+
+
+.link-box-soilMoisture {
+
+    /* Text location customization */
+    display: flex;
+    align-items: center;
+
+    flex-direction: column;
+    justify-content: flex-end ;
+    padding-bottom: 15px;
+
+
+    /* Text display customization */
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    z-index: 3;
+    text-decoration: none;
+    font-weight: 300;
+
+    
+    /* Box customization */
+    border-radius: 50px;        /* how rounded the boxes are */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);  /* fall back color, in case images don't wor; */
+    background-color: rgba(255, 255, 255, 0.9);
+    background-image: url("../../images/soilMoisture.png");
+    background-size: cover;
+    background-repeat: no-repeat; /* Prevents the image from tiling */
+    background-position: center;  /* Centers the image in the box */
+
+    height: 200px;
+    width: 250px;
+
+    /* Smooth transition for hover effects */
+    transition: all 0.2s ease-in-out;
+
+
+}
+
+
+
+
+
+
+.link-box-temp {
+
+    /* Text location customization */
+    display: flex;
+    align-items: center;
+
+    flex-direction: column;
+    justify-content: flex-end ;
+    padding-bottom: 15px;
+
+
+    /* Text display customization */
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    z-index: 3;
+    text-decoration: none;
+    font-weight: 300;
+
+    
+    /* Box customization */
+    border-radius: 50px;        /* how rounded the boxes are */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);  /* fall back color, in case images don't wor; */
+    background-color: rgba(255, 255, 255, 0.9);
+    background-image: url("../../images/temp.png");
+    background-size: cover;
+    background-repeat: no-repeat; /* Prevents the image from tiling */
+    background-position: center;  /* Centers the image in the box */
+
+    height: 200px;
+    width: 250px;
+
+    /* Smooth transition for hover effects */
+    transition: all 0.2s ease-in-out;
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* this is for the chatbox */
+.chatbox-container {
+    position: relative;
+    z-index: 3;             /* Forces it to sit on top of the video */
+    box-sizing: border-box;
+    
+    /* Flexibility & Size rules */
+    width: 90%;             /* Shrinks smoothly on smaller mobile screens */
+    max-width: 700px;       /* Matches the structural boundary of the four circles on desktop */
+    min-height: 250px;      /* Set a base height for the chat history space */
+    
+    /* Styling aesthetics */
+    background-color: rgba(255, 255, 255, 0.9); /* Opaque white allows background video hints */
+    border: 2px solid black;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    
+    /* Internal text layout */
+    text-align: center;  
+
+}
