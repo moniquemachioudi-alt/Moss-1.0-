@@ -32,8 +32,11 @@ fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(11, 9), sharex=True)
 ax1.plot(df["minutes"], df["moisture_pct"], color="lightgray", label="Raw Moisture Content") # make the raw data in grey
 ax1.plot(df["minutes"], df["moisture_smooth"], color="tab:green", label="Filtered Moisture Content") # let green be the smoothed out data
 
+
+
+
 ax1.set_ylabel("Moisture (%)")
-ax1.set_title("Apparent Volumetric Moisture Content Over Time (min)")
+ax1.set_title("(a) Apparent Volumetric Moisture Content Over Time (min)")
 ax1.legend()
 ax1.grid(alpha=0.3) # make the grid lines 0.3 opaque
 
@@ -43,7 +46,7 @@ ax2.plot(df["minutes"], df["voltage_v"], color="lightgray", label="Raw Voltage")
 ax2.plot(df["minutes"], df["voltage_smooth"], color="tab:blue", label="Filtered Voltage Signal") # let green be the smoothed out data
 
 ax2.set_ylabel("Voltage (V)")
-ax2.set_title("Sensor Analog Signal (Vout) Over Time (min)")
+ax2.set_title("(b) Sensor Analog Signal (Vout) Over Time (min)")
 ax2.legend()
 ax2.grid(alpha=0.3) 
 
@@ -54,7 +57,7 @@ ax3.plot(df["minutes"], df["raw_adc"], color="lightgray", label="Raw ADC counts"
 ax3.plot(df["minutes"], df["raw_adc_smooth"], color="tab:purple", label="Filtered ADC counts") # let green be the smoothed out data
 
 ax3.set_ylabel("Raw ADC")
-ax3.set_title("ESP32 ADC Count Over Time (min)")
+ax3.set_title("(c) ESP32 ADC Count Over Time (min)")
 ax3.legend()
 ax3.set_xlabel("Elapsed time (minutes)")
 ax3.grid(alpha=0.3) 
