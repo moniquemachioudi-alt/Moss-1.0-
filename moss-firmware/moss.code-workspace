@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "../moss-backend"
+		},
+		{
+			"path": "../moss-app"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../analysis"
+		}
+	]
+}
