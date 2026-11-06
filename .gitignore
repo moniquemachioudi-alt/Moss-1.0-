@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-node_modules
-LoginPage_slow.mp4
-=======
+
 # CLEAN VERSION 
 # one gitignore for all three components 
 
@@ -56,4 +53,4 @@ moss-backend/.env
 # yarn-debug.log*
 # yarn-error.log*
 # LoginPage_slow.mp4
->>>>>>> main
+
