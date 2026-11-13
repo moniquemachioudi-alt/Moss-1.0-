@@ -54,3 +54,4 @@ moss-backend/.env
 # yarn-error.log*
 # LoginPage_slow.mp4
 
+node_modules/
