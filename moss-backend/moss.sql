@@ -62,8 +62,13 @@ CREATE TABLE devices (
 CREATE TABLE readings (
     device_id text not null references devices(esp32_id_number),
     recorded_at timestamptz not null default now(),
-    readings_raw real,
-    readings_converted real,
+    elapsed_time_s real,
+    raw_adc real,
+    voltage_v real,
+    soil_moisture real, 
+    soil_temp real, 
+    light_lux real, 
+    air_temp real,
     plant_id uuid references plants(plant_id),
     primary key (device_id, recorded_at)
 
