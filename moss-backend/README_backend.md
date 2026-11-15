@@ -1,6 +1,4 @@
 This is the folder that will contained everything for the backend
-<<<<<<< HEAD
-=======
 
 
 Backend - Python/FastAPI for Data Processing and AI Logic
@@ -36,4 +34,3 @@ It runs the Web Scraper to grab fresh internet data.It bundles that data togethe
 The AI Model sends the prompt/response back to your Backend.
 
 Your Backend cleans up the answer and sends it back to the Mobile App.
->>>>>>> main

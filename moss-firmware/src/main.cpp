@@ -1,4 +1,11 @@
-// ------------------------------ CAPACITIVE SOIL MOISTURE ------------------------------
+#include <Arduino.h>
+#include <OneWire.h>            // for DS18B20 Soil Temperature Sensor
+#include <DallasTemperature.h>  // for DS18B20 Soil Temperature Sensor
+
+#include <WiFi.h>
+#include <time.h>
+
+// =================== HOW IT SENDS DATA TO THE FAST API ===================
 
 /*  GOAL: output clean cvs file
 
@@ -9,37 +16,89 @@
     run : cat /dev/cu.usbserial-0001 > ~/Documents/mySideQuests/Moss/data
 2. Run the program
 3. Look at the sensor_data.csv files 
-
 */
 
+// PIN 2     : Blue LED => blinks when it records data 
+// PIN 34    : Capacitive Soil Moisture
+// PIN 18    : DS18B20 Soil Temperature Sensor
+// PIN 21/22 : BH1750 Light Sensor 
+//           : AHT20 Air Humidity + Temp
+//           : OLED screen
 
-#include <Arduino.h>
 
-// connected on GPIO34 
-const int MOISTURE_PIN = 34;
 const int bluePin = 2;  
+const int SOIL_MOIS_PIN = 34;
+const int SOIL_TEMP_PIN = 18;
 
 
-// established endpoints 
-const int AIR_VALUE = 2640;
-const int WATER_VALUE = 982;
+// measured calibrated endpoints
+// const int AIR_VALUE = 2640;
+// const int WATER_VALUE = 982;
+
+
+// ================ DS18B20 Soil Temperature ================
+
+const int NUM_SAMPLES = 10;
+
+OneWire soilsTemp_wire(SOIL_TEMP_PIN);                        // creating OneWire comm. channel object of type OneWire
+DallasTemperature soilTemp_sensor(&soilsTemp_wire);   // creating Temp Controller 
+
+
+// Find the Median of NUM_SAMPLES ADC reads
+// Why? One bad reading can't skew it (so use this instead of an average).
+int readMoistureMedian() {
+  int samples[NUM_SAMPLES];
+  for (int i=0; i < NUM_SAMPLES; i++) {
+    samples[i] = analogRead(SOIL_MOIS_PIN);
+    delay(5);
+  }
+
+  // sort the array in ascending order
+  for (int i=0; i < NUM_SAMPLES; i++) {
+    int key = samples[i];
+    int j = i-1;
+    while (j>=0 && samples[j] > key) {
+      samples [j+1] = samples[j];
+      j--;
+    }
+    samples[j+1] = key;
+  }
+  return samples [NUM_SAMPLES/2];
+}
+
+
+// ================ BINARY FORMAT DATE & TIME ================
+time_t get_time_binary() {
+  time_t now;
+  time(&now);  // Writes current real-world Unix timestamp into 'now'
+  return now;
+}
+
+
+
+
+
 
 
 void setup() {
   Serial.begin(115200);
   delay(1000);
 
+  // Configure ADC for Moisture Probe
   analogReadResolution(12);   // make it 12 bit range aka, 0-4095
-  analogSetPinAttenuation(MOISTURE_PIN, ADC_11db); // scale down the incoming voltage so it can safely read higher analog signals.
+  analogSetPinAttenuation(SOIL_MOIS_PIN, ADC_11db); // scale down the incoming voltage so it can safely read higher analog signals.
 
+  // Configure DS18B20 Soil Temperature
+  soilTemp_sensor.begin();
+
+  // Make the LED blink when recording data 
   pinMode(bluePin, OUTPUT);   // pushing electricity OUT to power things
   digitalWrite(bluePin, LOW); // start with low
 
-  // my CVS
-  Serial.println("elapsed_time_s,raw_adc,voltage_v,moisture_pct");
+  // what you see in the Serial Monitor
+  Serial.println("recorded_at, ELAPSED_TIME_s, raw_adc, soil_temp_c");
+
 }
-
-
 
 
 void loop() {
@@ -47,39 +106,34 @@ void loop() {
   // configure the LED pin, s.t. it blinks blue whenever data is collecting
   digitalWrite(bluePin, HIGH);
 
+  // 1. Get the date and time 
+  time_t time_binary = get_time_binary();
 
-  // Calculates a smoothed average of 10 soil moisture sensor readings to 
-  // runs a loop 10 times, sums it up, then average it
-  // then reruns the loop (void loop())
-  // more accurate and stable measurement => filters out random electrical noise
-  long sum = 0;
-  for (int i = 0; i < 10; i++) {
-    sum += analogRead(MOISTURE_PIN);
-    delay(10);
-  }
+  // 2. Read Soil Moisture
+  int rawADC = readMoistureMedian();
+  // float voltage = (rawADC / 4095.0) * 3.3;
 
-  int rawADC = sum / 10;
+  // 2. Read Soil Temperature (°C)
+  soilTemp_sensor.requestTemperatures();
+  float soilTempC = soilTemp_sensor.getTempCByIndex(0);
 
-  float voltage = (rawADC / 4095.0) * 3.3;
-
-  int moisturePercent = map(rawADC, AIR_VALUE, WATER_VALUE, 0, 100);
-  moisturePercent = constrain(moisturePercent, 0, 100);
-
+  Serial.print(time_binary);
+  Serial.print(",");
   Serial.print(millis());
   Serial.print(",");
   Serial.print(rawADC);
+  // Serial.print(",");
+  // Serial.print(voltage, 2);
+  // Serial.print(",");
+  // Serial.print(moisturePercent);
   Serial.print(",");
-  Serial.print(voltage, 2);
-  Serial.print(",");
-  Serial.println(moisturePercent);
+  Serial.println(soilTempC, 2);
 
 
   // turn off the LED after one cycle
   digitalWrite(bluePin, LOW);
 
   delay(1000);
-
-
 
   // This loop takes 10 sequential samples spaced 10 milliseconds apart, 
   // sums them together, and computes the mathematical average. 
