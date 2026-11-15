@@ -3,6 +3,7 @@ import serial
 
 import time
 from datetime import datetime
+import math
 
 PORT = "/dev/cu.usbserial-0001"  # Confirm with ls /dev/cu.usb*
 BAUD = 115200
@@ -34,7 +35,7 @@ except Exception as e:
 with open(filename, "w", encoding="utf-8") as f:
 
     # Scientific header to follow SQL HEADER
-    header = "recorded_at, ELAPSED_TIME_s, raw_adc, soil_temp_c, light_lux\n"
+    header = "recorded_at, ELAPSED_TIME_s, raw_adc, soil_temp_c, light_lux, air_temp_c, air_rh_pct\n"
     f.write(header)
     f.flush()       #forces Python's internal buffer to write the header directly to mac storage disk
     print(f"Logging data to {filename}... Press Ctrl+C to stop.")
@@ -63,8 +64,8 @@ with open(filename, "w", encoding="utf-8") as f:
             # Time normalization aka, start at 0s
             parts = raw_line.split(",")
 
-            # Expecting 4 values from firmware: binary_time, millis, raw_adc, soil_temp
-            if len(parts) == 5:
+            # Expecting 4 values from firmware: recorded_at, ELAPSED_TIME_s, raw_adc, soil_temp_c, light_lux, air_temp_c, air_rh_pct
+            if len(parts) == 7:
                 try: 
                     esp_time = int(parts[0].strip())
                     elapsed_ms = int(parts[1])
@@ -72,6 +73,8 @@ with open(filename, "w", encoding="utf-8") as f:
                     # voltage = float(parts[3])
                     soilTemp_raw = float(parts[3])
                     lightLux_raw = float(parts[4])
+                    airTemp_raw = float(parts[5])
+                    airRH_raw = float(parts[6])
                 except ValueError:
                         # Skips corrupted serial lines safely without crashing the script
                         continue
@@ -105,13 +108,27 @@ with open(filename, "w", encoding="utf-8") as f:
                     lightLux_str = f"{lightLux_raw:.2f}"
 
 
+                # no negative value for Air Temp
+                if math.isnan(airTemp_raw) or not (-30.0 <= airTemp_raw <= 40.0):
+                    airTemp_str = ""
+                else:
+                    airTemp_str = f"{airTemp_raw:.2f}"
+
+
+                # no negative value for Air RH
+                if (math.isnan(airRH_raw) or not (0.0 <= airRH_raw <= 100.0)):
+                    airRH_str = ""
+                else:
+                    airRH_str = f"{airRH_raw:.2f}"
+
+
                 if start_time is None:
                     start_time = time.time()
 
                 elapsed_seconds = round(time.time() - start_time, 2)
                 # now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 
-                formatted_row = f"{binary_time},{elapsed_ms},{raw_adc},{soilTemp_str},{lightLux_str}"
+                formatted_row = f"{binary_time},{elapsed_ms},{raw_adc},{soilTemp_str},{lightLux_str},{airTemp_str},{airRH_str}"
                 print(formatted_row)
                 f.write(formatted_row + "\n")
                 f.flush()

@@ -7,6 +7,7 @@
 
 #include <BH1750.h>             // for BH1750 Light Sensor 
 
+#include <Adafruit_AHTX0.h>     // for AHT20 Air Humid. and Temp Sensor
 
 
 // =================== HOW IT SENDS DATA TO THE FAST API ===================
@@ -51,6 +52,9 @@ time_t get_time_binary() {
 
 // ======================= Light Sensor =======================
 BH1750 lightMeter;
+
+// ======================= Air Temp/Humid Sensor =======================
+Adafruit_AHTX0 air_temp_rh;
 
 
 // ================= DS18B20 Soil Temperature =================
@@ -97,6 +101,7 @@ void setup() {
   // 3. Initialize the BH1750 Light Sensor 
   Wire.begin(21, 22);
   lightMeter.begin();
+  air_temp_rh.begin();
 
 
 
@@ -105,7 +110,7 @@ void setup() {
   digitalWrite(bluePin, LOW); // start with low
 
   // what you see in the Serial Monitor
-  Serial.println("recorded_at, ELAPSED_TIME_s, raw_adc, soil_temp_c, light_lux");
+  Serial.println("recorded_at, ELAPSED_TIME_s, raw_adc, soil_temp_c, light_lux, air_temp_c, air_rh_pct");
 
 }
 
@@ -126,8 +131,15 @@ void loop() {
   soilTemp_sensor.requestTemperatures();
   float soilTempC = soilTemp_sensor.getTempCByIndex(0);
 
-  // 3. Ambien Light (Lux)
+  // 3. Ambient Light (Lux)
   float lux = lightMeter.readLightLevel();
+
+  // 4. Air Temp (°C) and Humidity (%) 
+  sensors_event_t humidity, temp;
+  air_temp_rh.getEvent(&humidity, &temp);
+  float airTempC = temp.temperature;
+  float airRH = humidity.relative_humidity;
+
 
 
   Serial.print(time_binary);
@@ -142,7 +154,11 @@ void loop() {
   Serial.print(",");
   Serial.print(soilTempC, 2);
   Serial.print(",");
-  Serial.println(lux, 1);
+  Serial.print(lux, 1);
+  Serial.print(",");
+  Serial.print(airTempC, 2);
+  Serial.print(",");
+  Serial.println(airRH, 2);
 
 
   // turn off the LED after one cycle
