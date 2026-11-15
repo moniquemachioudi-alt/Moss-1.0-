@@ -1,9 +1,13 @@
 #include <Arduino.h>
+#include <WiFi.h>
+#include <time.h>
+
 #include <OneWire.h>            // for DS18B20 Soil Temperature Sensor
 #include <DallasTemperature.h>  // for DS18B20 Soil Temperature Sensor
 
-#include <WiFi.h>
-#include <time.h>
+#include <BH1750.h>             // for BH1750 Light Sensor 
+
+
 
 // =================== HOW IT SENDS DATA TO THE FAST API ===================
 
@@ -30,16 +34,26 @@ const int bluePin = 2;
 const int SOIL_MOIS_PIN = 34;
 const int SOIL_TEMP_PIN = 18;
 
+const int NUM_SAMPLES = 10;
 
 // measured calibrated endpoints
 // const int AIR_VALUE = 2640;
 // const int WATER_VALUE = 982;
 
 
-// ================ DS18B20 Soil Temperature ================
+// ================ BINARY FORMAT DATE & TIME ================
+time_t get_time_binary() {
+  time_t now;
+  time(&now);  // Writes current real-world Unix timestamp into 'now'
+  return now;
+}
 
-const int NUM_SAMPLES = 10;
 
+// ======================= Light Sensor =======================
+BH1750 lightMeter;
+
+
+// ================= DS18B20 Soil Temperature =================
 OneWire soilsTemp_wire(SOIL_TEMP_PIN);                        // creating OneWire comm. channel object of type OneWire
 DallasTemperature soilTemp_sensor(&soilsTemp_wire);   // creating Temp Controller 
 
@@ -67,36 +81,31 @@ int readMoistureMedian() {
 }
 
 
-// ================ BINARY FORMAT DATE & TIME ================
-time_t get_time_binary() {
-  time_t now;
-  time(&now);  // Writes current real-world Unix timestamp into 'now'
-  return now;
-}
-
-
-
-
-
 
 
 void setup() {
   Serial.begin(115200);
   delay(1000);
 
-  // Configure ADC for Moisture Probe
+  // 1. Configure ADC for Moisture Probe
   analogReadResolution(12);   // make it 12 bit range aka, 0-4095
   analogSetPinAttenuation(SOIL_MOIS_PIN, ADC_11db); // scale down the incoming voltage so it can safely read higher analog signals.
 
-  // Configure DS18B20 Soil Temperature
+  // 2. Configure DS18B20 Soil Temperature
   soilTemp_sensor.begin();
+
+  // 3. Initialize the BH1750 Light Sensor 
+  Wire.begin(21, 22);
+  lightMeter.begin();
+
+
 
   // Make the LED blink when recording data 
   pinMode(bluePin, OUTPUT);   // pushing electricity OUT to power things
   digitalWrite(bluePin, LOW); // start with low
 
   // what you see in the Serial Monitor
-  Serial.println("recorded_at, ELAPSED_TIME_s, raw_adc, soil_temp_c");
+  Serial.println("recorded_at, ELAPSED_TIME_s, raw_adc, soil_temp_c, light_lux");
 
 }
 
@@ -106,16 +115,20 @@ void loop() {
   // configure the LED pin, s.t. it blinks blue whenever data is collecting
   digitalWrite(bluePin, HIGH);
 
-  // 1. Get the date and time 
+  // 0. Get the date and time 
   time_t time_binary = get_time_binary();
 
-  // 2. Read Soil Moisture
+  // 1. Read Soil Moisture
   int rawADC = readMoistureMedian();
   // float voltage = (rawADC / 4095.0) * 3.3;
 
   // 2. Read Soil Temperature (°C)
   soilTemp_sensor.requestTemperatures();
   float soilTempC = soilTemp_sensor.getTempCByIndex(0);
+
+  // 3. Ambien Light (Lux)
+  float lux = lightMeter.readLightLevel();
+
 
   Serial.print(time_binary);
   Serial.print(",");
@@ -127,7 +140,9 @@ void loop() {
   // Serial.print(",");
   // Serial.print(moisturePercent);
   Serial.print(",");
-  Serial.println(soilTempC, 2);
+  Serial.print(soilTempC, 2);
+  Serial.print(",");
+  Serial.println(lux, 1);
 
 
   // turn off the LED after one cycle

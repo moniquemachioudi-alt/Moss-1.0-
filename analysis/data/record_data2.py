@@ -34,7 +34,7 @@ except Exception as e:
 with open(filename, "w", encoding="utf-8") as f:
 
     # Scientific header to follow SQL HEADER
-    header = "recorded_at, ELAPSED_TIME_s, raw_adc, soil_temp_c\n"
+    header = "recorded_at, ELAPSED_TIME_s, raw_adc, soil_temp_c, light_lux\n"
     f.write(header)
     f.flush()       #forces Python's internal buffer to write the header directly to mac storage disk
     print(f"Logging data to {filename}... Press Ctrl+C to stop.")
@@ -64,13 +64,14 @@ with open(filename, "w", encoding="utf-8") as f:
             parts = raw_line.split(",")
 
             # Expecting 4 values from firmware: binary_time, millis, raw_adc, soil_temp
-            if len(parts) == 4:
+            if len(parts) == 5:
                 try: 
                     esp_time = int(parts[0].strip())
                     elapsed_ms = int(parts[1])
                     raw_adc = int(parts[2])
                     # voltage = float(parts[3])
                     soilTemp_raw = float(parts[3])
+                    lightLux_raw = float(parts[4])
                 except ValueError:
                         # Skips corrupted serial lines safely without crashing the script
                         continue
@@ -97,13 +98,20 @@ with open(filename, "w", encoding="utf-8") as f:
                     soilTemp_str = f"{soilTemp_raw:.2f}"
 
 
+                # no negative value for Light
+                if lightLux_raw < 0:
+                    lightLux_str = ""
+                else:
+                    lightLux_str = f"{lightLux_raw:.2f}"
+
+
                 if start_time is None:
                     start_time = time.time()
 
                 elapsed_seconds = round(time.time() - start_time, 2)
                 # now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 
-                formatted_row = f"{binary_time},{elapsed_ms},{raw_adc},{soilTemp_str}"
+                formatted_row = f"{binary_time},{elapsed_ms},{raw_adc},{soilTemp_str},{lightLux_str}"
                 print(formatted_row)
                 f.write(formatted_row + "\n")
                 f.flush()
