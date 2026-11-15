@@ -6,6 +6,7 @@
 .DS_Store
 Thumbs.db
 .vscode/
+.venv
 
 # --- Media ---
 *.mp4
