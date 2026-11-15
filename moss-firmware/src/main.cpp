@@ -4,9 +4,7 @@
 
 #include <OneWire.h>            // for DS18B20 Soil Temperature Sensor
 #include <DallasTemperature.h>  // for DS18B20 Soil Temperature Sensor
-
 #include <BH1750.h>             // for BH1750 Light Sensor 
-
 #include <Adafruit_AHTX0.h>     // for AHT20 Air Humid. and Temp Sensor
 
 
@@ -30,6 +28,9 @@
 //           : AHT20 Air Humidity + Temp
 //           : OLED screen
 
+// set up the WIFI 
+const char* WIFI_SSID = "TP-Link_A5E4";
+const char* WIFI_PASS = "16067332";
 
 const int bluePin = 2;  
 const int SOIL_MOIS_PIN = 34;
@@ -50,16 +51,11 @@ time_t get_time_binary() {
 }
 
 
-// ======================= Light Sensor =======================
-BH1750 lightMeter;
 
-// ======================= Air Temp/Humid Sensor =======================
-Adafruit_AHTX0 air_temp_rh;
-
-
-// ================= DS18B20 Soil Temperature =================
-OneWire soilsTemp_wire(SOIL_TEMP_PIN);                        // creating OneWire comm. channel object of type OneWire
-DallasTemperature soilTemp_sensor(&soilsTemp_wire);   // creating Temp Controller 
+BH1750 lightMeter; // Light Sensor
+Adafruit_AHTX0 air_temp_rh; // Air Temp/Humid Sensor
+OneWire soilsTemp_wire(SOIL_TEMP_PIN);                // DS18B20 Soil Temperature
+DallasTemperature soilTemp_sensor(&soilsTemp_wire);   
 
 
 // Find the Median of NUM_SAMPLES ADC reads
@@ -92,8 +88,8 @@ void setup() {
   delay(1000);
 
   // 1. Configure ADC for Moisture Probe
-  analogReadResolution(12);   // make it 12 bit range aka, 0-4095
-  analogSetPinAttenuation(SOIL_MOIS_PIN, ADC_11db); // scale down the incoming voltage so it can safely read higher analog signals.
+  analogReadResolution(12);                           // make it 12 bit range aka, 0-4095
+  analogSetPinAttenuation(SOIL_MOIS_PIN, ADC_11db);   // scale down the incoming voltage so it can safely read higher analog signals.
 
   // 2. Configure DS18B20 Soil Temperature
   soilTemp_sensor.begin();
@@ -109,10 +105,28 @@ void setup() {
   pinMode(bluePin, OUTPUT);   // pushing electricity OUT to power things
   digitalWrite(bluePin, LOW); // start with low
 
+
+
+  // 1. Connect to WIFI
+  Serial.print("CONNECTING TO WIFI");
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("\nWi-Fi Connected! IP: " + WiFi.localIP().toString());
+
+  // 2. Sync Unix timestamp via NTP
+  configTime(0, 0, "pool.ntp.org", "time.nist.gov");
+
+
   // what you see in the Serial Monitor
   Serial.println("recorded_at, ELAPSED_TIME_s, raw_adc, soil_temp_c, light_lux, air_temp_c, air_rh_pct");
 
 }
+
+
+
 
 
 void loop() {
@@ -120,8 +134,12 @@ void loop() {
   // configure the LED pin, s.t. it blinks blue whenever data is collecting
   digitalWrite(bluePin, HIGH);
 
-  // 0. Get the date and time 
-  time_t time_binary = get_time_binary();
+  // // 0. Get the date and time (NO WIFI)
+  // time_t time_binary = get_time_binary();
+
+  // 0. Get the date and time (WITH WIFI)
+  time_t now;
+  time(&now);
 
   // 1. Read Soil Moisture
   int rawADC = readMoistureMedian();
@@ -141,36 +159,43 @@ void loop() {
   float airRH = humidity.relative_humidity;
 
 
+  // Print the exact JSON payload you will soon POST to FastAPI
+  String payload = "{";
+  payload += "\"recorded_at\":" + String((long)now) + ",";
+  payload += "\"ELAPSED_TIME_s\":" + String(millis()) + ",";
+  payload += "\"raw_adc\":" + String(rawADC) + ",";
+  payload += "\"soil_temp_c\":" + String(soilTempC, 2) + ",";
+  payload += "\"light_lux\":" + String(lux, 1) + ",";
+  payload += "\"air_temp_c\":" + String(airTempC, 2) + ",";
+  payload += "\"air_rh_pct\":" + String(airRH, 2);
+  payload += "}";
 
-  Serial.print(time_binary);
-  Serial.print(",");
-  Serial.print(millis());
-  Serial.print(",");
-  Serial.print(rawADC);
+  Serial.println(payload);
+
+
+  // WHEN USING CSV
+  // Serial.print(time_binary);
   // Serial.print(",");
-  // Serial.print(voltage, 2);
+  // Serial.print(millis());
   // Serial.print(",");
-  // Serial.print(moisturePercent);
-  Serial.print(",");
-  Serial.print(soilTempC, 2);
-  Serial.print(",");
-  Serial.print(lux, 1);
-  Serial.print(",");
-  Serial.print(airTempC, 2);
-  Serial.print(",");
-  Serial.println(airRH, 2);
+  // Serial.print(rawADC);
+  // // Serial.print(",");
+  // // Serial.print(voltage, 2);
+  // // Serial.print(",");
+  // // Serial.print(moisturePercent);
+  // Serial.print(",");
+  // Serial.print(soilTempC, 2);
+  // Serial.print(",");
+  // Serial.print(lux, 1);
+  // Serial.print(",");
+  // Serial.print(airTempC, 2);
+  // Serial.print(",");
+  // Serial.println(airRH, 2);
 
 
   // turn off the LED after one cycle
   digitalWrite(bluePin, LOW);
-
-  delay(1000);
-
-  // This loop takes 10 sequential samples spaced 10 milliseconds apart, 
-  // sums them together, and computes the mathematical average. 
-  // This smooths out voltage spikes into a stable signal.
-
-
+  delay(2000);
 }
 
 
