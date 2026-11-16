@@ -213,7 +213,8 @@ void loop() {
 
   // turn off the LED after one cycle
   digitalWrite(bluePin, LOW);
-  delay(2000);
+  // delay(2000);   // every 2 seconds
+  delay(6000);      // every 60 seconds
 }
 
 
