@@ -36,7 +36,7 @@ ADC_SAT = 982;
 # defines the data validation blueprint for env sensors readings 
 # prepares the backend to receive incoming data
 class Reading(BaseModel):
-    device_id: str 
+    device_id: str | None = None
     recorded_at: datetime
     raw_adc: int | None = None
     soil_temp_c: float | None = None
@@ -66,12 +66,12 @@ def receive_reading(reading: Reading):
         reading.air_rh_pct,
     ]
 
-    if all(value is None for value in sensor_values):
-            raise HTTPException(
-                status_code=400, 
-                detail="Reading has no sensor values. Send at least one of: "
-                "raw_adc, voltage_v, soil_moisture, soil_temp, "
-                "light_lux, air_temp, air_humidity.")
+    # if all(value is None for value in sensor_values):
+    #         raise HTTPException(
+    #             status_code=400, 
+    #             detail="Reading has no sensor values. Send at least one of: "
+    #             "raw_adc, voltage_v, soil_moisture, soil_temp, "
+    #             "light_lux, air_temp, air_humidity.")
 
     # clean the ADC values & convert raw_adc to %moisture
     clean_adc = None
