@@ -15,17 +15,20 @@ class Reading(BaseModel):
     air_rh_pct: float | None = None
 
 
-
+# Sanity check to see the server is open 
 @app.get("/")
 def health():
     return {"status": "ok"}
 
+
+# Receives the incoming packet 
+# checks at least one sensor is sending something
 @app.post("/readings")
 def receive_reading(reading: Reading):
         print(reading)
         sensor_values = [
-             reading.raw_adc, 
              reading.recorded_at,
+             reading.raw_adc,
              reading.soil_temp_c, 
              reading.light_lux, 
              reading.air_temp_c, 

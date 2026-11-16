@@ -1,11 +1,13 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <time.h>
+#include <HTTPClient.h>
 
 #include <OneWire.h>            // for DS18B20 Soil Temperature Sensor
 #include <DallasTemperature.h>  // for DS18B20 Soil Temperature Sensor
 #include <BH1750.h>             // for BH1750 Light Sensor 
 #include <Adafruit_AHTX0.h>     // for AHT20 Air Humid. and Temp Sensor
+
 
 
 // =================== HOW IT SENDS DATA TO THE FAST API ===================
@@ -32,11 +34,14 @@
 const char* WIFI_SSID = "TP-Link_A5E4";
 const char* WIFI_PASS = "16067332";
 
+const char* DEVICE_ID = "pothos_1";
+
 const int bluePin = 2;  
 const int SOIL_MOIS_PIN = 34;
 const int SOIL_TEMP_PIN = 18;
 
 const int NUM_SAMPLES = 10;
+
 
 // measured calibrated endpoints
 // const int AIR_VALUE = 2640;
@@ -120,8 +125,9 @@ void setup() {
   configTime(0, 0, "pool.ntp.org", "time.nist.gov");
 
 
+  // USE THIS WHEN TESTING WITH CSV
   // what you see in the Serial Monitor
-  Serial.println("recorded_at, ELAPSED_TIME_s, raw_adc, soil_temp_c, light_lux, air_temp_c, air_rh_pct");
+  // Serial.println("device_id", "recorded_at, ELAPSED_TIME_s, raw_adc, soil_temp_c, light_lux, air_temp_c, air_rh_pct");
 
 }
 
@@ -161,8 +167,8 @@ void loop() {
 
   // Print the exact JSON payload you will soon POST to FastAPI
   String payload = "{";
+  payload += "\"device_id\":\"" + String(DEVICE_ID) + "\",";
   payload += "\"recorded_at\":" + String((long)now) + ",";
-  payload += "\"ELAPSED_TIME_s\":" + String(millis()) + ",";
   payload += "\"raw_adc\":" + String(rawADC) + ",";
   payload += "\"soil_temp_c\":" + String(soilTempC, 2) + ",";
   payload += "\"light_lux\":" + String(lux, 1) + ",";
@@ -171,6 +177,18 @@ void loop() {
   payload += "}";
 
   Serial.println(payload);
+
+  // WHEN SENDING OVER WIFI
+  if (WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+    http.begin("http://192.168.0.135:8000/readings");
+    http.addHeader("Content-type", "application/json");
+    int httpCode = http.POST(payload);
+    Serial.println("POST STATUS: " + String(httpCode));
+    http.end();
+  }
+  
+
 
 
   // WHEN USING CSV

@@ -2,14 +2,14 @@
 -- Moss database schema v1
 -- To run in the Supabase SQL Editor
 
--- Order matters: A table must exist before another ytable can reference it. 
+-- Order matters: A table must exist before another table can reference it. 
 -- So the order is users -> plants -> devices -> readings 
 -- ================================================================================
 
 -- When a database is initialized you want to remove anything that may have 
 -- existed before to prevent data contamination 
 DROP TABLE IF EXISTS readings CASCADE; 
-DROP TABLE IF EXISTS devices CASCASE; 
+DROP TABLE IF EXISTS devices CASCADE; 
 DROP TABLE IF EXISTS plants CASCADE; 
 DROP TABLE IF EXISTS users CASCADE; 
 
@@ -28,7 +28,7 @@ CREATE TABLE users (
 -- ========================================================================
 
 CREATE TABLE plants (
-    plant_id uuid primary key deafult gen_random_uuid(), 
+    plant_id uuid primary key default gen_random_uuid(), 
     plant_category text, 
     plant_type text, 
     -- REMOVED NOT NULL FROM THE COLUMNS FOR NOW BECASE WE ARE STILL TRYING TO 
@@ -74,7 +74,7 @@ CREATE TABLE readings (
 );
 
 
-ALTER TABLE  users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE plants ENABLE ROW LEVEL SECURITY;
 ALTER TABLE devices ENABLE ROW LEVEL SECURITY;
 ALTER TABLE readings ENABLE ROW LEVEL SECURITY;
