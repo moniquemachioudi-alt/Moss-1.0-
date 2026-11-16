@@ -34,7 +34,7 @@
 const char* WIFI_SSID = "TP-Link_A5E4";
 const char* WIFI_PASS = "16067332";
 
-const char* DEVICE_ID = "pothos_1";
+const char* DEVICE_ID = "esp32_01";
 
 const int bluePin = 2;  
 const int SOIL_MOIS_PIN = 34;

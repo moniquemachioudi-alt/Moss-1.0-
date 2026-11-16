@@ -49,7 +49,7 @@ CREATE TABLE plants (
 -- ========================================================================
 
 CREATE TABLE devices (
-    esp32_id_number text primary key,
+    device_id text primary key,
     location text,
     active_nonactive boolean not null,
     plant_id uuid references plants(plant_id),
@@ -60,7 +60,7 @@ CREATE TABLE devices (
 -- ========================================================================
 
 CREATE TABLE readings (
-    device_id text not null references devices(esp32_id_number),
+    device_id text not null references devices(device_id),
     recorded_at timestamptz not null default now(),
     raw_adc real,
     soil_moisture_pct real, 
